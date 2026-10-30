@@ -38,25 +38,26 @@ cleaned AS (
        -- Date/Time
        CAST(filing_date AS TIMESTAMP) AS filing_date,
        CAST(signoff_date AS TIMESTAMP) AS signoff_date,
-       CAST(approved_date AS TIMESTAP) AS approved_date,
+       CAST(approved_date AS TIMESTAMP) AS approved_date,
 
        -- Job Filing details
        CAST(applicant_license AS STRING) AS applicant_license,
        CAST(applicant_first_name AS STRING) AS applicant_first_name,
        CAST(applicant_last_name AS STRING) AS applicant_last_name,
+       CAST(applicant_business_name AS STRING) AS applicant_business_name,
        CAST(owner_s_business_name AS STRING) AS owner_s_business_name,
-       CAST(initial_cost AS FLOAT) AS initial_cost,
+       CAST(initial_cost AS DECIMAL) AS initial_cost,
        CAST(job_description AS STRING) AS job_description,
-       CAST(building_type AS STRING) AS building_type),
-       CAST(bin AS STRING) as bin)
+       CAST(building_type AS STRING) AS building_type,
+       CAST(bin AS STRING) as bin,
        UPPER(TRIM(CAST(filing_status AS STRING))) AS filing_status,
 
        -- Location - clean zip code, handling several common zip code data problems
        CASE
            WHEN UPPER(TRIM(CAST(zip AS STRING))) IN ('N/A', 'NA') THEN NULL
            WHEN UPPER(TRIM(CAST(zip AS STRING))) = 'ANONYMOUS' THEN 'Anonymous'
-           WHEN LENGTH(CAST(zip AS STRING)) = 5 THEN CAST(incident_zip AS STRING)
-           WHEN LENGTH(CAST(zip AS STRING)) = 9 THEN CAST(incident_zip AS STRING)
+           WHEN LENGTH(CAST(zip AS STRING)) = 5 THEN CAST(zip AS STRING)
+           WHEN LENGTH(CAST(zip AS STRING)) = 9 THEN CAST(zip AS STRING)
            WHEN LENGTH(CAST(zip AS STRING)) = 10
                AND REGEXP_CONTAINS(CAST(zip AS STRING), r'^\d{5}-\d{4}')
            THEN CAST(zip AS STRING)
@@ -79,7 +80,7 @@ cleaned AS (
        CAST(longitude AS DECIMAL) AS longitude,
 
        -- Clearer column name as well for this one
-       CAST(open_data_channel_type AS STRING) AS method_of_submission,
+       --CAST(open_data_channel_type AS STRING) AS method_of_submission,
 
        -- Metadata
        CURRENT_TIMESTAMP() AS _stg_loaded_at
@@ -87,8 +88,8 @@ cleaned AS (
    FROM source
 
    -- Filters
-   WHERE unique_key IS NOT NULL
-   AND filing_date_date IS NOT NULL
+   WHERE job_filing_number IS NOT NULL
+   AND filing_date IS NOT NULL
    AND CAST(filing_date AS DATE) >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 YEAR)
    AND borough IS NOT NULL
 
