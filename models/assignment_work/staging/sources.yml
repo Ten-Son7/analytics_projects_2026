@@ -15,7 +15,7 @@ sources:
     database: tenson-baruch-2026
     schema: nyc_homework_raw_data
     tables:
-      - name: source_service_job-apps_homework
+      - name: source_service_job_apps_homework
         description: |
           NYC job application.
           One row per job application.
