@@ -14,6 +14,8 @@ cleaned AS (
            filing_date,
            signoff_date,
            approved_date,
+           current_status_date,
+           first_permit_date,
            applicant_license,
            applicant_first_name,
            applicant_last_name,
@@ -39,6 +41,8 @@ cleaned AS (
        CAST(filing_date AS TIMESTAMP) AS filing_date,
        CAST(signoff_date AS TIMESTAMP) AS signoff_date,
        CAST(approved_date AS TIMESTAMP) AS approved_date,
+       CAST(current_status_date as TIMESTAMP) AS current_status_date,
+       CAST(first_permit_date as TIMESTAMP) AS first_permit_date,
 
        -- Job Filing details
        CAST(applicant_license AS STRING) AS applicant_license,
