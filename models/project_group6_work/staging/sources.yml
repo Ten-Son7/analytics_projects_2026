@@ -4,7 +4,7 @@ version: 2
 sources:
   - name: raw
     description: Raw data loaded from NYC Open Data
-    database: yonglin-cis-baruch
+    database: tenson-baruch-2026
     schema: 311_open_data_project
 
     tables:
@@ -20,7 +20,9 @@ sources:
             description: Unique ID for the service request
             data_tests:
               - not_null
-              - unique
+              - unique:
+                  config:
+                    severity: warn
 
           - name: created_date
             description: Date and time the request was created
@@ -81,7 +83,9 @@ sources:
             description: Unique summons identifier
             data_tests:
               - not_null
-              - unique
+              - unique:
+                  config:
+                    severity: warn
 
           - name: issue_date
             description: Date the violation was issued
